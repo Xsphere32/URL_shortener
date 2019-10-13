@@ -1,0 +1,29 @@
+﻿
+@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@model URL_shortener.Models.Url
+<div>
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(Model => Model.ID)
+        <div>
+            @Html.LabelFor(model => model.FullUrl)
+            <p>@Html.EditorFor(model=>model.FullUrl)</p>
+        </div>
+        <div>
+            @Html.LabelFor(model => model.ShortUrl)
+            <p>@Html.EditorFor(model=>model.ShortUrl)</p>
+        </div>
+        <div>
+            @Html.LabelFor(model => model.DateOfCreation)
+            <p>@Html.EditorFor(model=>model.DateOfCreation)</p>
+        </div>
+        <div>
+            @Html.LabelFor(model => model.PassCount)
+            <p>@Html.EditorFor(model=>model.PassCount)</p>
+        </div>
+        <p><input type="submit" value="Сохранить" /></p>
+    }
+</div>

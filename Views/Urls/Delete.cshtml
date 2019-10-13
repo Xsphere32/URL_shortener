@@ -1,0 +1,17 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@model URL_shortener.Models.Url
+
+<h3>Вы действительно хотите удалить ссылку? </h3>
+<div>
+    <p>Длинный URL: @Model.FullUrl</p>
+    <p>Короткий URL: @Model.ShortUrl</p>
+
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        <input type="submit" value="Удалить" />
+    }
+
+</div>
