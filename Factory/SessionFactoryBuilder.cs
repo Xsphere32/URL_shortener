@@ -14,7 +14,7 @@ namespace URL_shortener.Factory
         public static ISessionFactory BuildSessionFactory(bool create = false, bool update = false)
         {
             return Fluently.Configure()
-                           .Database(MySQLConfiguration.Standard.ConnectionString("Server=localhost; Database=urlsdb;User ID=root;Password=A12358133b;"))
+                           .Database(MySQLConfiguration.Standard.ConnectionString("Server=localhost; Database=urlsdb;User ID=xsphere;Password=A12358133b;"))
                            .Mappings(m => m.FluentMappings.AddFromAssemblyOf<Models.UrlMap>())
                            .CurrentSessionContext("call")
                            .BuildSessionFactory();

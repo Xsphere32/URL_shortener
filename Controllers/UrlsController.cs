@@ -41,14 +41,44 @@ namespace URL_shortener.Controllers
             return View();
         }
         
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public async Task<IActionResult> New(Url url)
+        //{
+        //    using (var session = _SessionFactoryBuilder.OpenSession())
+        //    {
+        //        using (var transaction = session.BeginTransaction())
+        //        {
+        //            url.DateOfCreation = DateTime.Now;
+        //            url.PassCount = 0;
+        //            url.ShortUrl = "http://auto.bus/" + GenerateCode();
+        //            var ExistUrls = session.CreateCriteria<Url>().Add(Restrictions.Like("FullUrl", url.FullUrl, MatchMode.Anywhere)).List<Url>();
+        //            if (ExistUrls.Count == 0)
+        //            {
+        //                await session.SaveOrUpdateAsync(url);
+        //                await transaction.CommitAsync();
+        //                return RedirectToAction("Index", "Urls");
+        //            }
+        //            else
+        //            {
+        //                var ExistUrl = ExistUrls.FirstOrDefault();
+        //                return Content($"Такая запись уже есть в БД {ExistUrl.ShortUrl} ");
+        //            }
+                    
+        //        }
+        //    }
+        //}
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> New(Url url)
+        public async Task<IActionResult> New(string FullUrl)
         {
+            Url url = new Url();
             using (var session = _SessionFactoryBuilder.OpenSession())
             {
                 using (var transaction = session.BeginTransaction())
                 {
+                    url.FullUrl = FullUrl;
                     url.DateOfCreation = DateTime.Now;
                     url.PassCount = 0;
                     url.ShortUrl = "http://auto.bus/" + GenerateCode();
@@ -64,10 +94,50 @@ namespace URL_shortener.Controllers
                         var ExistUrl = ExistUrls.FirstOrDefault();
                         return Content($"Такая запись уже есть в БД {ExistUrl.ShortUrl} ");
                     }
-                    
+
                 }
             }
         }
+
+        [HttpGet]
+        public async Task<IActionResult> CreatedUrl(string FullUrl)
+        {
+            if(!FullUrl.Contains("http://") | !FullUrl.Contains("https://"))
+            {
+                FullUrl = "http://" + FullUrl;
+            }
+            Url url = new Url();
+            using (var session = _SessionFactoryBuilder.OpenSession())
+            {
+                using (var transaction = session.BeginTransaction())
+                {
+                    var ExistUrl = session.Query<Url>()
+                                           .Where(o => o.FullUrl == FullUrl)
+                                           .SingleOrDefault();
+                    if (ExistUrl != null)
+                    {
+                        return PartialView(ExistUrl);
+                    }
+                    else
+                    {
+                        url.FullUrl = FullUrl;
+                        url.DateOfCreation = DateTime.Now;
+                        url.PassCount = 0;
+                        url.ShortUrl = "http://auto.bus/" + GenerateCode();
+                        await session.SaveOrUpdateAsync(url);
+                        await transaction.CommitAsync();
+                        return PartialView(url);
+                    }
+
+                        
+                    
+                    
+
+                }
+            }
+
+        }
+
 
         [HttpGet]
         public IActionResult Edit(int id)

@@ -1,0 +1,14 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@model URL_shortener.Models.Url
+<input readonly="readonly" id="ShortUrl" value="@Model.ShortUrl" />
+<input type="button" id="copy" onclick="CopyLink()" value="Скопировать" />
+<script type="text/javascript">
+    function CopyLink() {
+        var copyText = $('#ShortUrl')
+        copyText.select();
+        document.execCommand("Copy");
+        copyText.disableSelection();
+    }
+</script>

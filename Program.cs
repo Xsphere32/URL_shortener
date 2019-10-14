@@ -28,7 +28,6 @@ namespace URL_shortener
             WebHost.CreateDefaultBuilder(args)
             .UseStartup<Startup>()
             .UseKestrel()
-            .UseUrls("http://auto.bus:80")
             .Build();
     }
 }
