@@ -6,26 +6,43 @@
 <div class="center">
     <form method="get">
         @Html.AntiForgeryToken()
-        <div>
-            @Html.LabelFor(model => model.FullUrl)
-            <p>@Html.EditorFor(model => model.FullUrl, new { htmlattributes = new { @id = "FullUrl" } }) <input type="submit" id="Reduce" value="Сократить" /></p>
+        <div class="full-url">
+           @Html.LabelFor(model => model.FullUrl, new { htmlattributes = new { @class = "label", @placeholder = "Ссылка для сокращения" } })
+           @Html.EditorFor(model => model.FullUrl, new { htmlattributes = new { @id = "FullUrl", @class = "urls" } })
+           <input class="button" type="submit" id="Reduce" value="Сократить" />
         </div>
-        <div>
-            @Html.LabelFor(model => model.ShortUrl)
-            <div id="result"><input type="text" readonly="readonly" value="" /> <input type="button" id="copy" onclick="CopyLink()" value="Скопировать" /> </div>
+        <div class="short-url">
+            @Html.LabelFor(model => model.ShortUrl, new { htmlattributes = new { @class = "label" } })
+            <a id="result"><input type="text" class="urls" readonly="readonly" placeholder="Короткая ссылка" value="" /></a>
+            <input class="button" type="button" id="copy" onclick="CopyLink()" value="Скопировать" />
         </div>
-        <p></p>
     </form>
 </div>
 <script src="~/js/jquery-3.3.1.js"></script>
 <script type="text/javascript">
+     
      $(document).ready(function () {
         $('#Reduce').click(function (e) {
             e.preventDefault();
             var FullUrl = $('#FullUrl').val();
-            FullUrl = encodeURIComponent(FullUrl);
-            $('#result').load('@Url.Action("CreatedUrl", "Urls")?FullUrl='+FullUrl)
+            if (FullUrl.length < 13) {
+                var result = confirm("Ссылка итак коротка, вы уверены что нужно укоротить?")
+                if (result) {
+                    FullUrl = encodeURIComponent(FullUrl);
+                    $('#result').load('@Url.Action("CreatedUrl", "Urls")?FullUrl=' + FullUrl)
+                }
+            }
+            else {
+                 FullUrl = encodeURIComponent(FullUrl);
+                 $('#result').load('@Url.Action("CreatedUrl", "Urls")?FullUrl=' + FullUrl)
+            }
         });
      });
 
+    function CopyLink() {
+        var copyText = $('#ShortUrl')
+        copyText.select();
+        document.execCommand("Copy");
+        copyText.disableSelection();
+    }
 </script>

@@ -18,16 +18,12 @@ namespace URL_shortener
             BuildWebHost(args).Run();
         }
 
-        //public static IHostBuilder CreateHostBuilder(string[] args) =>
-        //    Host.CreateDefaultBuilder(args)
-        //        .ConfigureWebHostDefaults(webBuilder =>
-        //        {
-        //            webBuilder.UseStartup<Startup>();
-        //        });
+        
         public static IWebHost BuildWebHost(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
             .UseStartup<Startup>()
             .UseKestrel()
+            .UseUrls("http://auto.bus:80")
             .Build();
     }
 }

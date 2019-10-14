@@ -17,7 +17,6 @@ namespace URL_shortener
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddRouting();
-            //services.AddNHibernate();
             services.AddMvc(options =>
             {
                 options.EnableEndpointRouting = false;
@@ -37,7 +36,7 @@ namespace URL_shortener
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=Urls}/{action=Index}");
+                    template: "{controller=Urls}/{action=New}");
             });
         }
     }
